@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AyurTrace - Light Botanical Theme */
+
+@layer base {
+  :root {
+    --background: 120 20% 98%;
+    --foreground: 150 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 150 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 20% 15%;
+
+    --primary: 152 45% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 36 35% 55%;
+    --secondary-foreground: 150 20% 10%;
+
+    --muted: 120 15% 93%;
+    --muted-foreground: 150 10% 45%;
+
+    --accent: 142 69% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+
+    --border: 120 10% 88%;
+    --input: 120 10% 90%;
+    --ring: 142 69% 40%;
+
+    --radius: 0.75rem;
+
+    --glow-green: 142 69% 40%;
+    --gold: 36 50% 55%;
+    --forest-deep: 150 38% 30%;
+    --botanical-pattern: 120 20% 96%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(152 45% 38%), hsl(142 69% 40%));
+    --gradient-gold: linear-gradient(135deg, hsl(36 50% 45%), hsl(36 50% 60%));
+    --gradient-dark: linear-gradient(180deg, hsl(120 20% 98%), hsl(120 15% 95%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(120 15% 98%));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(142 69% 40% / 0.08), transparent 70%);
+
+    --shadow-glow: 0 0 20px hsl(142 69% 40% / 0.12);
+    --shadow-card: 0 1px 3px hsl(0 0% 0% / 0.06), 0 1px 2px hsl(0 0% 0% / 0.04);
+    --shadow-elevated: 0 4px 12px hsl(0 0% 0% / 0.08);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 150 20% 30%;
+    --sidebar-primary: 142 69% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 120 15% 95%;
+    --sidebar-accent-foreground: 150 20% 15%;
+    --sidebar-border: 120 10% 90%;
+    --sidebar-ring: 142 69% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}
+
+@layer components {
+  .glow-green {
+    box-shadow: 0 0 15px hsl(var(--glow-green) / 0.15);
+  }
+
+  .glow-green-sm {
+    box-shadow: 0 0 8px hsl(var(--glow-green) / 0.12);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 15px hsl(var(--gold) / 0.15);
+  }
+
+  .card-botanical {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-card);
+    border-radius: var(--radius);
+  }
+
+  .card-elevated {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-elevated);
+    border-radius: var(--radius);
+  }
+
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-botanical-pattern {
+    background-image:
+      radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--glow-green) / 0.02) 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, hsl(var(--gold) / 0.02) 0%, transparent 40%);
+  }
+
+  .auth-overlay {
+    background: linear-gradient(
+      135deg,
+      hsl(150 20% 4% / 0.85),
+      hsl(150 20% 4% / 0.9)
+    );
+  }
+
+  .badge-approved {
+    @apply bg-success/15 text-success border border-success/25;
+  }
+
+  .badge-pending {
+    @apply bg-warning/15 text-warning border border-warning/25;
+  }
+
+  .badge-blocked {
+    @apply bg-destructive/15 text-destructive border border-destructive/25;
+  }
+
+  .border-glow {
+    position: relative;
+  }
+
+  .border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--gradient-primary);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+    opacity: 0.3;
+  }
+
+  .progress-glow {
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.3);
+  }
+}
+
+@layer utilities {
+  .animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      box-shadow: 0 0 10px hsl(var(--glow-green) / 0.15);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--glow-green) / 0.25);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.5s ease-out forwards;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out forwards;
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .transition-glow {
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .transition-glow:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
+  }
+}
