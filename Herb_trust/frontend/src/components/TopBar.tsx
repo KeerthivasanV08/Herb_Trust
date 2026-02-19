@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
+// TEMP AUTH DISABLED FOR EVALUATION – RESTORE SUPABASE AFTER DEMO
+
 const roleTitles: Record<UserRole, string> = {
   farmer: 'nav.farmer',
   manufacturer: 'nav.manufacturer',
@@ -19,9 +21,15 @@ export default function TopBar() {
 
   if (!user) return null;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/auth');
+  const handleLogout = async () => {
+    // AUTH DISABLED: Logout just clears local state
+    console.log('Logging out...');
+    try {
+      await logout();
+      navigate('/auth');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const initials = user.name

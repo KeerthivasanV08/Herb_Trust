@@ -1,7 +1,8 @@
 """
-Supabase JWT Authentication for Django REST Framework
+Demo Authentication for Django REST Framework
 
-This module provides JWT token verification for Supabase-authenticated users.
+This module provides demo authentication for testing/demo purposes.
+Uses a mock user with demo credentials.
 """
 import os
 import jwt as pyjwt
@@ -9,17 +10,25 @@ from rest_framework import authentication, exceptions
 from django.conf import settings
 
 
-class SupabaseAuthentication(authentication.BaseAuthentication):
+class DemoAuthentication(authentication.BaseAuthentication):
     """
-    Custom authentication class for Supabase JWT tokens.
+    Demo authentication for testing purposes.
+    Accepts the demo user credentials via a simple auth token.
+    """
     
-    Verifies the JWT token sent in the Authorization header
-    and extracts user information from the token payload.
-    """
+    # Demo credentials - hardcoded for demo purposes
+    DEMO_USER_ID = 'demo-user'
+    DEMO_EMAIL = 'demo@herbtrust.com'
+    DEMO_ROLE = 'farmer'
+    DEMO_TOKEN = 'demo-auth-token-12345'
     
     def authenticate(self, request):
         """
-        Authenticate the request using Supabase JWT token.
+        Authenticate the request using demo credentials.
+        
+        For demo purposes, we accept:
+        1. Authorization: Bearer demo-auth-token-12345
+        2. Or no auth header (returns demo user)
         
         Returns:
             tuple: (user_data, None) if authentication successful
@@ -30,8 +39,13 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
         """
         auth_header = request.META.get('HTTP_AUTHORIZATION', '')
         
+        # DEMO MODE: Allow requests without auth header too
         if not auth_header:
-            return None  # No authentication attempted
+            # Return demo user by default
+            console_log = f"DEMO AUTH: No auth header, using demo user"
+            print(f"[DEMO] {console_log}")
+            user_data = self._create_demo_user()
+            return (user_data, None)
         
         try:
             # Extract token from "Bearer <token>"
@@ -42,22 +56,40 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
             
             token = parts[1]
             
-            # Verify and decode the JWT token
-            payload = self._verify_token(token)
+            # DEMO MODE: Accept demo token
+            if token == self.DEMO_TOKEN:
+                print(f"[DEMO] Valid demo token provided")
+                user_data = self._create_demo_user()
+                return (user_data, None)
             
-            # Extract user information from token payload
-            user_data = self._extract_user_data(payload)
+            # For future compatibility, try Supabase auth if available
+            try:
+                payload = self._verify_token(token)
+                user_data = self._extract_user_data(payload)
+                return (user_data, None)
+            except Exception as supabase_error:
+                print(f"[DEMO] Supabase auth failed: {supabase_error}")
+                raise exceptions.AuthenticationFailed(f'Invalid token: {str(supabase_error)}')
             
-            return (user_data, None)
-            
-        except pyjwt.PyJWTError as e:
-            raise exceptions.AuthenticationFailed(f'Invalid token: {str(e)}')
+        except exceptions.AuthenticationFailed:
+            raise
         except Exception as e:
             raise exceptions.AuthenticationFailed(f'Authentication failed: {str(e)}')
     
+    def _create_demo_user(self):
+        """Create a demo user object."""
+        user_data = {
+            'id': self.DEMO_USER_ID,
+            'email': self.DEMO_EMAIL,
+            'role': self.DEMO_ROLE,
+            'is_authenticated': True,
+        }
+        return type('DemoUser', (), user_data)
+    
     def _verify_token(self, token):
         """
-        Verify the JWT token using Supabase JWT secret.
+        Verify the JWT token using Supabase JWT secret (if configured).
+        Falls back to demo mode if not available.
         
         Args:
             token (str): JWT token to verify
@@ -71,24 +103,11 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
         jwt_secret = getattr(settings, 'SUPABASE_JWT_SECRET', None)
         
         if not jwt_secret:
+            # No JWT secret configured - use demo mode
+            print("[DEMO] No SUPABASE_JWT_SECRET configured, using demo mode")
             raise exceptions.AuthenticationFailed(
-                'SUPABASE_JWT_SECRET not configured in settings'
+                'SUPABASE_JWT_SECRET not configured - using demo authentication'
             )
-        
-        # Debug: Decode token header without verification to see the algorithm
-        try:
-            import json
-            import base64
-            header_data = token.split('.')[0]
-            # Add padding if needed
-            padding = 4 - len(header_data) % 4
-            if padding != 4:
-                header_data += '=' * padding
-            decoded_header = base64.urlsafe_b64decode(header_data)
-            header = json.loads(decoded_header)
-            print(f"DEBUG: Token algorithm: {header.get('alg')}")
-        except Exception as e:
-            print(f"DEBUG: Failed to decode token header: {e}")
         
         try:
             payload = pyjwt.decode(
@@ -137,3 +156,4 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
         }
         
         return type('SupabaseUser', (), user_data)
+

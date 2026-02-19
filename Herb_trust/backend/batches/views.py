@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404
 from io import BytesIO
 from datetime import datetime
 
-from accounts.authentication import SupabaseAuthentication
+# TEMP AUTH DISABLED FOR EVALUATION – RESTORE SUPABASE AFTER DEMO
+
 from ai_engine.services import verify_herb
 from compliance.services import (
     compliance_decision,
@@ -24,26 +25,16 @@ from .certificate import generate_certificate_pdf
 class BatchViewSet(viewsets.ModelViewSet):
     queryset = Batch.objects.all()
     serializer_class = BatchSerializer
-    authentication_classes = [SupabaseAuthentication]
-    permission_classes = [IsAuthenticated]  # Require authentication by default
+    permission_classes = [AllowAny]  # AUTH DISABLED
 
     def get_permissions(self):
-        """
-        Override to allow public access to certain actions.
-        """
-        if self.action in ['list', 'retrieve']:
-            # Allow anyone to view batches (for development/testing)
-            return [AllowAny()]
-        return [IsAuthenticated()]
+        """Allow all requests without authentication."""
+        return [AllowAny()]
 
     def perform_create(self, serializer):
-        # Only farmers can create batches
-        if not hasattr(self.request.user, 'role') or self.request.user.role != 'farmer':
-            from rest_framework.exceptions import PermissionDenied
-            raise PermissionDenied('Only farmers can create batches')
-        
-        # Save batch with Supabase farmer ID
-        batch = serializer.save(farmer_id=self.request.user.id)
+        # Generate unique farmer ID for evaluation mode
+        farmer_id = f"eval-user-{int(datetime.now().timestamp())}"
+        batch = serializer.save(farmer_id=farmer_id)
 
         # AI authenticity
         auth_score = verify_herb(batch.image.path)

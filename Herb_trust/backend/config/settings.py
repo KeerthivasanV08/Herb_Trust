@@ -168,12 +168,13 @@ AUTH_USER_MODEL = "accounts.User"
 
 from datetime import timedelta
 
+# TEMP AUTH DISABLED FOR EVALUATION – RESTORE SUPABASE AFTER DEMO
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "accounts.authentication.SupabaseAuthentication",
+        # AUTH DISABLED
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+        "rest_framework.permissions.AllowAny",
     ),
 }
 

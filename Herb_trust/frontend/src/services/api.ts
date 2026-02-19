@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import type { Batch, CreateBatchPayload, ApiError } from '@/types/batch';
-import { getAccessToken } from '@/lib/supabase';
+
+// TEMP AUTH DISABLED FOR EVALUATION – RESTORE SUPABASE AFTER DEMO
 
 // Create axios instance with base configuration
 const api = axios.create({
@@ -8,16 +9,14 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: false, // Don't use cookies, use JWT instead
+  withCredentials: false,
 });
 
-// Add request interceptor to include JWT token
+// Request interceptor - NO AUTHENTICATION REQUIRED
 api.interceptors.request.use(
   async (config) => {
-    const token = await getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // AUTH DISABLED: No token needed
+    console.log('API Request:', config.method?.toUpperCase(), config.url);
     return config;
   },
   (error) => {
