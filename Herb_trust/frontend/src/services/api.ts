@@ -108,7 +108,7 @@ export const getAllBatches = async (): Promise<Batch[]> => {
  */
 export const downloadCertificate = async (batchId: number): Promise<Blob> => {
   try {
-    const response = await api.get<Blob>(`/api/certificate/${batchId}/`, {
+    const response = await api.get<Blob>(`/api/batches/${batchId}/certificate/`, {
       responseType: 'blob',
     });
     return response.data;
