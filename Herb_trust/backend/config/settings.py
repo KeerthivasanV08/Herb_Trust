@@ -25,12 +25,17 @@ if env_file.exists():
         key, value = stripped.split("=", 1)
         os.environ.setdefault(key, value.strip().strip('"').strip("'"))
 
+# Supabase Configuration
+SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
+if not SUPABASE_JWT_SECRET:
+    raise ValueError("SUPABASE_JWT_SECRET environment variable must be set. Get it from Supabase Dashboard → Settings → API → Project JWT Secret")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-fallback-key-change-this")
+SECRET_KEY = os.getenv("SECRET_KEY", "r(6am6hv(36n^l+%-r=l0w(ezh#&a(gq&#imv^^2$731#5k9sl")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -68,6 +73,18 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8081",
+    "http://127.0.0.1:8082",
+    "http://localhost:8080",
+    "http://localhost:8081",
+    "http://localhost:8082",
+    "http://[::1]:8080",
+    "http://[::1]:8081",
+    "http://[::1]:8082",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 
 ROOT_URLCONF = 'config.urls'
@@ -153,13 +170,17 @@ from datetime import timedelta
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "accounts.authentication.SupabaseAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
-}
+# Optional: Keep SIMPLE_JWT for backward compatibility if needed
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+# }
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

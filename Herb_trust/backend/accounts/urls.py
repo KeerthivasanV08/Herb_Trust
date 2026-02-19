@@ -1,11 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
 app_name = 'accounts'
 
+router = DefaultRouter()
+router.register(r'', views.UserProfileViewSet, basename='profile')
+
 urlpatterns = [
-    # Add your authentication URLs here
-    # path('register/', views.register, name='register'),
-    # path('login/', views.login, name='login'),
-    # path('logout/', views.logout, name='logout'),
+    path('', include(router.urls)),
 ]

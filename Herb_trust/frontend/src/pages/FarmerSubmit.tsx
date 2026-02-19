@@ -7,17 +7,14 @@ import { Label } from '@/components/ui/label';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { herbTypes } from '@/data/mockData';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const steps = [
-  { id: 1, title: 'Upload Image', description: 'Capture or upload herb photo' },
-  { id: 2, title: 'Location', description: 'Confirm GPS coordinates' },
-  { id: 3, title: 'Details', description: 'Select herb type and quantity' },
-  { id: 4, title: 'Submit', description: 'Review and submit batch' },
-];
+// Real herb types from Django backend HERB_CHOICES
+const herbTypes = ['Ashwagandha', 'Tulsi', 'Neem', 'Turmeric'];
 
 export default function FarmerSubmit() {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedHerb, setSelectedHerb] = useState('');
@@ -27,6 +24,13 @@ export default function FarmerSubmit() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  const steps = [
+    { id: 1, title: t('farmer.submit.uploadImage'), description: t('farmer.submit.uploadImage') },
+    { id: 2, title: t('farmer.submit.location'), description: t('farmer.submit.location') },
+    { id: 3, title: t('farmer.submit.herbType'), description: t('farmer.submit.herbType') },
+    { id: 4, title: t('common.submit'), description: t('common.submit') },
+  ];
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -63,15 +67,15 @@ export default function FarmerSubmit() {
   return (
     <div className="space-y-6 animate-fade-up">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Submit New Harvest</h1>
-        <p className="text-muted-foreground mt-1">Capture and submit your herb harvest data for verification.</p>
+        <h1 className="text-2xl font-bold text-foreground">{t('farmer.submit.title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('farmer.submit.subtitle')}</p>
       </div>
 
       <Card className="card-elevated">
         <CardHeader className="border-b border-border">
           <CardTitle className="flex items-center gap-2">
             <Leaf className="w-5 h-5 text-primary" />
-            Harvest Submission
+            {t('farmer.submit.title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
@@ -97,7 +101,7 @@ export default function FarmerSubmit() {
           {!isSubmitted ? (
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <Label>Herb Image</Label>
+                <Label>{t('farmer.submit.uploadImage')}</Label>
                 <div onClick={() => fileInputRef.current?.click()}
                   className={`relative aspect-video rounded-lg border-2 border-dashed transition-all cursor-pointer flex items-center justify-center ${
                     imagePreview ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50 hover:bg-muted/50'
@@ -107,50 +111,50 @@ export default function FarmerSubmit() {
                   ) : (
                     <div className="text-center p-6">
                       <ImageIcon className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-                      <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
-                      <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 10MB</p>
+                      <p className="text-sm text-muted-foreground">{t('farmer.submit.dragDrop')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">PNG, JPG</p>
                     </div>
                   )}
                 </div>
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} className="flex-1">
-                    <Upload className="w-4 h-4 mr-2" />Upload
+                    <Upload className="w-4 h-4 mr-2" />{t('common.upload')}
                   </Button>
                   <Button variant="outline" size="sm" className="flex-1">
-                    <Camera className="w-4 h-4 mr-2" />Camera
+                    <Camera className="w-4 h-4 mr-2" />{t('common.upload')}
                   </Button>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>GPS Location</Label>
+                  <Label>{t('farmer.submit.location')}</Label>
                   <div className="flex gap-2">
-                    <Input placeholder="Latitude" value={location.lat} onChange={e => setLocation({...location, lat: e.target.value})} />
-                    <Input placeholder="Longitude" value={location.lng} onChange={e => setLocation({...location, lng: e.target.value})} />
+                    <Input placeholder={t('farmer.submit.latitude')} value={location.lat} onChange={e => setLocation({...location, lat: e.target.value})} />
+                    <Input placeholder={t('farmer.submit.longitude')} value={location.lng} onChange={e => setLocation({...location, lng: e.target.value})} />
                   </div>
                   <Button variant="outline" size="sm" onClick={handleGetLocation} className="w-full">
-                    <MapPin className="w-4 h-4 mr-2" />Auto-detect Location
+                    <MapPin className="w-4 h-4 mr-2" />{t('farmer.submit.location')}
                   </Button>
                 </div>
                 <div className="space-y-2">
-                  <Label>Herb Type</Label>
+                  <Label>{t('farmer.submit.herbType')}</Label>
                   <Select value={selectedHerb} onValueChange={v => { setSelectedHerb(v); setCurrentStep(Math.max(currentStep, 3)); }}>
-                    <SelectTrigger><SelectValue placeholder="Select herb type" /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder={t('farmer.submit.selectHerb')} /></SelectTrigger>
                     <SelectContent>
                       {herbTypes.map(herb => <SelectItem key={herb} value={herb}>{herb}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Quantity (kg)</Label>
-                  <Input type="number" placeholder="Enter quantity" value={quantity}
+                  <Label>{t('farmer.batches.quantity')}</Label>
+                  <Input type="number" placeholder={t('farmer.batches.quantity')} value={quantity}
                     onChange={e => { setQuantity(e.target.value); if (e.target.value) setCurrentStep(4); }} />
                 </div>
                 <Button onClick={handleSubmit} disabled={!imagePreview || !selectedHerb || !quantity || isSubmitting}
                   className="w-full bg-gradient-primary hover:opacity-90 mt-4">
-                  {isSubmitting ? 'Processing...' : <><span>Submit Batch</span><ArrowRight className="w-4 h-4 ml-2" /></>}
+                  {isSubmitting ? t('farmer.submit.submitting') : <><span>{t('farmer.submit.submitBatch')}</span><ArrowRight className="w-4 h-4 ml-2" /></>}
                 </Button>
               </div>
             </div>
@@ -159,14 +163,14 @@ export default function FarmerSubmit() {
               <div className="w-20 h-20 mx-auto rounded-full bg-success/15 flex items-center justify-center mb-4">
                 <CheckCircle2 className="w-10 h-10 text-success" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Batch Submitted Successfully!</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">{t('common.success')}!</h3>
               <p className="text-muted-foreground mb-6">
-                Your harvest data has been submitted for verification.<br />
-                Batch ID: <span className="text-primary font-mono">BTH-{Date.now().toString().slice(-6)}</span>
+                {t('farmer.submit.subtitle')}<br />
+                {t('farmer.batches.batchId')}: <span className="text-primary font-mono">BTH-{Date.now().toString().slice(-6)}</span>
               </p>
               <div className="flex gap-3 justify-center">
-                <Button variant="outline" onClick={resetForm}>Submit Another</Button>
-                <Button className="bg-gradient-primary" onClick={() => navigate('/farmer/batches')}>View My Batches</Button>
+                <Button variant="outline" onClick={resetForm}>{t('common.submit')}</Button>
+                <Button className="bg-gradient-primary" onClick={() => navigate('/farmer/batches')}>{t('nav.batches')}</Button>
               </div>
             </div>
           )}

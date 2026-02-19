@@ -1,33 +1,35 @@
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Leaf, LayoutDashboard, Upload, Package, FileSearch,
-  ChevronLeft, ChevronRight, Factory, Shield, Sprout, Home, MapPin
+  ChevronLeft, ChevronRight, Factory, Shield, Sprout, Home, MapPin, Bell
 } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth, UserRole } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   href: string;
   icon: React.ElementType;
 }
 
 const roleNavItems: Record<UserRole, NavItem[]> = {
   farmer: [
-    { label: 'Home', href: '/farmer', icon: Home },
-    { label: 'Submit Harvest', href: '/farmer/submit', icon: Upload },
-    { label: 'My Batches', href: '/farmer/batches', icon: Package },
+    { labelKey: 'sidebar.home', href: '/farmer', icon: Home },
+    { labelKey: 'sidebar.submitHarvest', href: '/farmer/submit', icon: Upload },
+    { labelKey: 'sidebar.myBatches', href: '/farmer/batches', icon: Package },
+    { labelKey: 'sidebar.notifications', href: '/farmer/notifications', icon: Bell },
   ],
   manufacturer: [
-    { label: 'Home', href: '/manufacturer', icon: Home },
-    { label: 'Incoming Batches', href: '/manufacturer/incoming', icon: Package },
-    { label: 'Quality Reports', href: '/manufacturer/reports', icon: FileSearch },
+    { labelKey: 'sidebar.home', href: '/manufacturer', icon: Home },
+    { labelKey: 'sidebar.incomingBatches', href: '/manufacturer/incoming', icon: Package },
+    { labelKey: 'sidebar.qualityReports', href: '/manufacturer/reports', icon: FileSearch },
   ],
   auditor: [
-    { label: 'Home', href: '/auditor', icon: Home },
-    { label: 'Batch History', href: '/auditor/history', icon: FileSearch },
-    { label: 'Compliance Map', href: '/auditor/compliance-map', icon: MapPin },
+    { labelKey: 'sidebar.home', href: '/auditor', icon: Home },
+    { labelKey: 'sidebar.batchHistory', href: '/auditor/history', icon: FileSearch },
+    { labelKey: 'sidebar.complianceMap', href: '/auditor/compliance-map', icon: MapPin },
   ],
 };
 
@@ -37,13 +39,14 @@ const roleIcons: Record<UserRole, React.ElementType> = {
   auditor: Shield,
 };
 
-const roleLabels: Record<UserRole, string> = {
-  farmer: 'Farmer Portal',
-  manufacturer: 'Manufacturer Portal',
-  auditor: 'Auditor Portal',
+const roleLabelsKeys: Record<UserRole, string> = {
+  farmer: 'sidebar.farmerPortal',
+  manufacturer: 'sidebar.manufacturerPortal',
+  auditor: 'sidebar.auditorPortal',
 };
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
@@ -56,32 +59,32 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        'h-screen sticky top-0 flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300',
+        'h-screen sticky top-0 flex flex-col bg-gradient-to-b from-slate-800 to-slate-900 border-r border-slate-700/50 transition-all duration-300 shadow-2xl',
         isCollapsed ? 'w-16' : 'w-64'
       )}
     >
-      <div className="p-4 border-b border-sidebar-border">
+      <div className="p-4 border-b border-slate-700/50">
         <Link to="/" className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-            <Leaf className="w-6 h-6 text-primary" />
+          <div className="p-2 rounded-lg bg-emerald-500/20 backdrop-blur-sm shrink-0 border border-emerald-400/30">
+            <Leaf className="w-6 h-6 text-emerald-400" />
           </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <h1 className="text-lg font-bold text-gradient-primary whitespace-nowrap">AyurTrace</h1>
-              <p className="text-[10px] text-muted-foreground whitespace-nowrap">Herb Traceability</p>
+              <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent whitespace-nowrap">{t('index.hero.title')}</h1>
+              <p className="text-[10px] text-slate-400 whitespace-nowrap">{t('sidebar.herbTraceability')}</p>
             </div>
           )}
         </Link>
       </div>
 
       <div className={cn(
-        'mx-3 mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10',
+        'mx-3 mt-4 p-3 rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-400/20 backdrop-blur-sm',
         isCollapsed && 'mx-2 p-2'
       )}>
         <div className="flex items-center gap-2">
-          <RoleIcon className={cn('text-primary shrink-0', isCollapsed ? 'w-5 h-5' : 'w-4 h-4')} />
+          <RoleIcon className={cn('text-emerald-400 shrink-0', isCollapsed ? 'w-5 h-5' : 'w-4 h-4')} />
           {!isCollapsed && (
-            <span className="text-sm font-medium text-foreground">{roleLabels[user.role]}</span>
+            <span className="text-sm font-medium text-slate-100">{t(roleLabelsKeys[user.role])}</span>
           )}
         </div>
       </div>
@@ -94,16 +97,16 @@ export default function Sidebar() {
               key={item.href}
               to={item.href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group',
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group',
                 isActive
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                  ? 'bg-emerald-600 text-white font-medium shadow-lg shadow-emerald-600/30'
+                  : 'text-slate-300 hover:bg-slate-700/70 hover:text-white',
                 isCollapsed && 'justify-center px-2'
               )}
             >
               <item.icon className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" />
               {!isCollapsed && (
-                <span className="text-sm">{item.label}</span>
+                <span className="text-sm">{t(item.labelKey)}</span>
               )}
             </Link>
           );
@@ -112,14 +115,14 @@ export default function Sidebar() {
 
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="m-3 p-2 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
+        className="m-3 p-2.5 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center border border-slate-600/50 hover:border-slate-500 hover:shadow-lg"
       >
         {isCollapsed ? (
           <ChevronRight className="w-5 h-5" />
         ) : (
           <>
             <ChevronLeft className="w-5 h-5" />
-            <span className="ml-2 text-sm">Collapse</span>
+            <span className="ml-2 text-sm font-medium">{t('sidebar.collapse')}</span>
           </>
         )}
       </button>

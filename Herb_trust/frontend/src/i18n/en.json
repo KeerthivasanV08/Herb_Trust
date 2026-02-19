@@ -1,0 +1,322 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "back": "Back",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "download": "Download",
+    "certificate": "Certificate",
+    "search": "Search",
+    "filter": "Filter",
+    "filters": "Filters",
+    "all": "All",
+    "tagline": "Sustainable. Traceable. Trusted.",
+    "upload": "Upload"
+  },
+  "language": {
+    "select": "Select Language",
+    "english": "English",
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు"
+  },
+  "compliance": {
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pending": "Pending",
+    "fraudSuspected": "Fraud Suspected",
+    "compliant": "Compliant",
+    "nonCompliant": "Non-Compliant",
+    "underReview": "Under Review",
+    "verified": "Verified",
+    "notVerified": "Not Verified"
+  },
+  "fraudWarning": {
+    "title": "Suspicious Batch Detected",
+    "authenticityScore": "Authenticity Score",
+    "tooltip": "AI detected abnormal patterns in this batch",
+    "lowScore": "Low authenticity score detected",
+    "aiAlert": "AI Fraud Alert"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "submit": "Submit Batch",
+    "batches": "My Batches",
+    "incoming": "Incoming",
+    "reports": "Reports",
+    "history": "History",
+    "complianceMap": "Compliance Map",
+    "logout": "Logout",
+    "farmer": "Farmer Dashboard",
+    "manufacturer": "Manufacturer Dashboard",
+    "auditor": "Auditor Dashboard"
+  },
+  "sidebar": {
+    "home": "Home",
+    "submitHarvest": "Submit Harvest",
+    "myBatches": "My Batches",
+    "incomingBatches": "Incoming Batches",
+    "qualityReports": "Quality Reports",
+    "batchHistory": "Batch History",
+    "complianceMap": "Compliance Map",
+    "notifications": "Notifications",
+    "farmerPortal": "Farmer Portal",
+    "manufacturerPortal": "Manufacturer Portal",
+    "auditorPortal": "Auditor Portal",
+    "herbTraceability": "Herb Traceability",
+    "collapse": "Collapse"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "selectRole": "Select Your Role",
+    "loginButton": "Login to Dashboard",
+    "signupButton": "Create Account",
+    "terms": "By continuing, you agree to our Terms of Service and Privacy Policy",
+    "roles": {
+      "farmer": {
+        "title": "Farmer",
+        "description": "Submit harvest data and start verification"
+      },
+      "manufacturer": {
+        "title": "Manufacturer",
+        "description": "Review batches and make decisions"
+      },
+      "auditor": {
+        "title": "Auditor",
+        "description": "Monitor compliance and traceability"
+      }
+    }
+  },
+  "farmer": {
+    "dashboard": {
+      "welcome": "Welcome back",
+      "subtitle": "Your agricultural compliance at a glance",
+      "totalBatches": "Total Batches",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "recentSubmissions": "Recent Submissions",
+      "submissionTrend": "Submission Trend (7 Days)"
+    },
+    "submit": {
+      "title": "Submit New Batch",
+      "subtitle": "Upload your harvest details for verification",
+      "herbType": "Herb Type",
+      "selectHerb": "Select herb type",
+      "harvestDate": "Harvest Date",
+      "location": "Location Coordinates",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "uploadImage": "Upload Herb Image",
+      "dragDrop": "Drag and drop or click to upload",
+      "submitting": "Submitting...",
+      "submitBatch": "Submit for Verification"
+    },
+    "batches": {
+      "title": "Submitted Batches",
+      "subtitle": "Track all your submitted herb batches",
+      "batchId": "Batch ID",
+      "herb": "Herb",
+      "quantity": "Quantity",
+      "harvestDate": "Harvest Date",
+      "region": "Region",
+      "aiScore": "AI Score",
+      "status": "Status",
+      "noBatches": "No batches found.",
+      "downloadCertificate": "📄 Download Certificate"
+    }
+  },
+  "notifications": {
+    "title": "Crop History & Notifications",
+    "subtitle": "Track the progress of your submitted batches",
+    "timeline": "Batch Timeline",
+    "noNotifications": "No batches yet. Submit your first batch to see progress here.",
+    "stages": {
+      "submitted": "Submitted",
+      "aiVerified": "AI Verified",
+      "auditorApproved": "Auditor Approved",
+      "certified": "Certified"
+    },
+    "status": {
+      "submitted": "🔵 Submitted – Waiting for AI",
+      "aiAnalyzed": "🟡 AI Analysis Completed",
+      "approved": "🟢 Approved – Certificate Ready",
+      "rejected": "🔴 Rejected – Action Required"
+    },
+    "authenticitySCore": "Authenticity Score",
+    "rejectionReason": "Rejection Reason",
+    "viewDetails": "View Details"
+  },
+  "manufacturer": {
+    "dashboard": {
+      "welcome": "Welcome",
+      "subtitle": "Monitor incoming batches and quality metrics",
+      "totalReceived": "Total Received",
+      "pending": "Pending Review",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "batchStatus": "Batch Status Distribution",
+      "weeklyDecisions": "Weekly Decisions (7 Days)"
+    },
+    "incoming": {
+      "title": "Incoming Batches",
+      "subtitle": "Review and manage incoming herb batches",
+      "batchId": "Batch ID",
+      "herb": "Herb",
+      "farmer": "Farmer",
+      "aiScore": "AI Score",
+      "potency": "Potency",
+      "status": "Status",
+      "action": "Action",
+      "noBatches": "No batches found."
+    },
+    "reports": {
+      "title": "Batch Reports",
+      "subtitle": "Comprehensive analytics and insights",
+      "statusDistribution": "Status Distribution",
+      "avgScoreByHerb": "Avg Score by Herb Type",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "pending": "Pending"
+    }
+  },
+  "auditor": {
+    "dashboard": {
+      "welcome": "Welcome",
+      "subtitle": "This is governance without paperwork",
+      "totalTracked": "Total Tracked",
+      "compliant": "Compliant",
+      "nonCompliant": "Non-Compliant",
+      "regions": "Regions",
+      "recentBatches": "Recent Batches",
+      "complianceStatus": "Compliance Status",
+      "regionDistribution": "Region Distribution",
+      "complianceTrend": "Compliance Trend (7 Days)",
+      "herbComplianceRate": "Herb Compliance Rate",
+      "readOnlyAccess": "Read-Only Access"
+    },
+    "history": {
+      "title": "Batch History",
+      "subtitle": "Complete history of all tracked batches with blockchain verification",
+      "batchId": "Batch ID",
+      "herb": "Herb",
+      "farmer": "Farmer",
+      "region": "Region",
+      "date": "Date",
+      "aiScore": "AI Score",
+      "ecoValid": "Eco Valid",
+      "compliance": "Compliance",
+      "blockchainHash": "Blockchain Hash",
+      "allHerbs": "All Herbs",
+      "allStatuses": "All Statuses",
+      "allRegions": "All Regions",
+      "noBatches": "No batches found.",
+      "completeBatchHistory": "Complete Batch History"
+    },
+    "complianceMap": {
+      "title": "Compliance Geo-Map",
+      "subtitle": "Geographic visualization of compliance across regions",
+      "harvestLocationMap": "Harvest Location Map",
+      "interactiveGeoMap": "Interactive Geo-Map",
+      "showingLocations": "Showing harvest locations across regions",
+      "unknown": "Unknown",
+      "coordinatesNotAvailable": "Coordinates not available",
+      "farmer": "Farmer",
+      "totalLocations": "Total Locations",
+      "filterByStatus": "Filter by Status",
+      "filterByRegion": "Filter by Region",
+      "showing": "Showing",
+      "of": "of",
+      "status": "Status",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "viewDetails": "View Details",
+      "legend": "Legend"
+    }
+  },
+  "verify": {
+    "title": "Batch Verification",
+    "verified": "✓ VERIFIED",
+    "notVerified": "⚠ Not Verified",
+    "verificationFailed": "Verification Failed",
+    "batchNotFound": "Batch not found",
+    "approvedMessage": "This batch has been approved and verified",
+    "notApprovedMessage": "This batch has not been approved for verification",
+    "batchInformation": "Batch Information",
+    "batchId": "Batch ID",
+    "cropName": "Crop Name",
+    "verificationScores": "Verification Scores",
+    "authenticityScore": "Authenticity Score",
+    "potencyScore": "Potency Score",
+    "geoValidation": "Geo Validation",
+    "valid": "Valid",
+    "invalid": "Invalid",
+    "complianceStatus": "Compliance Status",
+    "blockchainHash": "Blockchain Verification Hash",
+    "verifiedOn": "Verified on",
+    "disclaimer": "This verification page confirms the authenticity and compliance status of the batch specified above. This document serves as proof of agricultural supply chain verification through blockchain technology.",
+    "notAvailable": "Not available",
+    "backToHome": "Back to Home",
+    "verifying": "Verifying batch..."
+  },
+  "index": {
+    "hero": {
+      "title": "Herb Trust",
+      "subtitle": "Blockchain-Powered Agricultural Verification",
+      "description": "Secure, transparent, and efficient supply chain verification for medicinal herbs",
+      "getStarted": "Get Started",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Choose Herb Trust?",
+      "aiVerification": {
+        "title": "AI-Powered Verification",
+        "description": "Advanced machine learning algorithms verify herb authenticity with 95%+ accuracy"
+      },
+      "blockchain": {
+        "title": "Blockchain Security",
+        "description": "Immutable records ensure transparency and trust across the supply chain"
+      },
+      "realTime": {
+        "title": "Real-Time Tracking",
+        "description": "Monitor your batches from farm to factory with instant updates"
+      }
+    },
+    "roles": {
+      "title": "Built for Everyone",
+      "farmer": {
+        "title": "For Farmers",
+        "description": "Submit your harvest, get instant verification, and ensure fair compensation"
+      },
+      "manufacturer": {
+        "title": "For Manufacturers",
+        "description": "Access verified batches, ensure quality, and maintain compliance effortlessly"
+      },
+      "auditor": {
+        "title": "For Auditors",
+        "description": "Transparent oversight with blockchain-backed verification and comprehensive reporting"
+      }
+    }
+  },
+  "chart": {
+    "day": "Day",
+    "count": "Count",
+    "rate": "Rate",
+    "score": "Score",
+    "name": "Name",
+    "value": "Value"
+  }
+}

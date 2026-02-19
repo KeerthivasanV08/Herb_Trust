@@ -1,0 +1,317 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "back": "वापस",
+    "submit": "जमा करें",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "view": "देखें",
+    "download": "डाउनलोड करें",
+    "certificate": "प्रमाणपत्र",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",    "filters": "फ़िल्टर",    "all": "सभी",
+    "tagline": "सतत। पता लगाने योग्य। विश्वसनीय।",
+    "upload": "अपलोड करें"
+  },
+  "language": {
+    "select": "भाषा चुनें",
+    "english": "English",
+    "hindi": "हिंदी",
+    "tamil": "தமிழ்",
+    "telugu": "తెలుగు"
+  },
+  "compliance": {
+    "approved": "स्वीकृत",
+    "rejected": "अस्वीकृत",
+    "pending": "लंबित",
+    "fraudSuspected": "धोखाधड़ी का संदेह",
+    "compliant": "अनुपालन",
+    "nonCompliant": "गैर-अनुपालन",
+    "underReview": "समीक्षाधीन",
+    "verified": "सत्यापित",
+    "notVerified": "सत्यापित नहीं"
+  },  "fraudWarning": {
+    "title": "संदिग्ध बैच का पता चला",
+    "authenticityScore": "प्रामाणिकता स्कोर",
+    "tooltip": "एआई ने इस बैच में असामान्य पैटर्न का पता लगाया",
+    "lowScore": "कम प्रामाणिकता स्कोर का पता चला",
+    "aiAlert": "एआई धोखाधड़ी चेतावनी"
+  },  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "submit": "बैच जमा करें",
+    "batches": "मेरे बैच",
+    "incoming": "आने वाले",
+    "reports": "रिपोर्ट",
+    "history": "इतिहास",
+    "complianceMap": "अनुपालन मानचित्र",
+    "logout": "लॉग आउट",
+    "farmer": "किसान डैशबोर्ड",
+    "manufacturer": "निर्माता डैशबोर्ड",
+    "auditor": "लेखा परीक्षक डैशबोर्ड"
+  },
+  "sidebar": {
+    "home": "होम",
+    "submitHarvest": "फसल जमा करें",
+    "myBatches": "मेरे बैच",
+    "incomingBatches": "आने वाले बैच",
+    "qualityReports": "गुणवत्ता रिपोर्ट",
+    "batchHistory": "बैच इतिहास",
+    "complianceMap": "अनुपालन मानचित्र",
+    "notifications": "सूचनाएं",
+    "farmerPortal": "किसान पोर्टल",
+    "manufacturerPortal": "निर्माता पोर्टल",
+    "auditorPortal": "लेखा परीक्षक पोर्टल",
+    "herbTraceability": "जड़ी-बूटी ट्रेसेबिलिटी",
+    "collapse": "संक्षिप्त करें"
+  },
+  "auth": {
+    "login": "लॉगिन",
+    "signup": "साइन अप करें",
+    "email": "ईमेल",
+    "emailPlaceholder": "अपना ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "passwordPlaceholder": "अपना पासवर्ड दर्ज करें",
+    "fullName": "पूरा नाम",
+    "fullNamePlaceholder": "अपना पूरा नाम दर्ज करें",
+    "selectRole": "अपनी भूमिका चुनें",
+    "loginButton": "डैशबोर्ड में लॉगिन करें",
+    "signupButton": "खाता बनाएं",
+    "terms": "जारी रखकर, आप हमारी सेवा की शर्तों और गोपनीयता नीति से सहमत होते हैं",
+    "roles": {
+      "farmer": {
+        "title": "किसान",
+        "description": "फसल डेटा जमा करें और सत्यापन शुरू करें"
+      },
+      "manufacturer": {
+        "title": "निर्माता",
+        "description": "बैच की समीक्षा करें और निर्णय लें"
+      },
+      "auditor": {
+        "title": "लेखा परीक्षक",
+        "description": "अनुपालन और ट्रेसेबिलिटी की निगरानी करें"
+      }
+    }
+  },
+  "farmer": {
+    "dashboard": {
+      "welcome": "वापस स्वागत है",
+      "subtitle": "आपका कृषि अनुपालन एक नज़र में",
+      "totalBatches": "कुल बैच",
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत",
+      "recentSubmissions": "हाल की प्रस्तुतियाँ",
+      "submissionTrend": "प्रस्तुति प्रवृत्ति (7 दिन)"
+    },
+    "submit": {
+      "title": "नया बैच जमा करें",
+      "subtitle": "सत्यापन के लिए अपनी फसल का विवरण अपलोड करें",
+      "herbType": "जड़ी-बूटी का प्रकार",
+      "selectHerb": "जड़ी-बूटी का प्रकार चुनें",
+      "harvestDate": "कटाई की तारीख",
+      "location": "स्थान निर्देशांक",
+      "latitude": "अक्षांश",
+      "longitude": "देशांतर",
+      "uploadImage": "जड़ी-बूटी की छवि अपलोड करें",
+      "dragDrop": "खींचें और छोड़ें या अपलोड करने के लिए क्लिक करें",
+      "submitting": "जमा हो रहा है...",
+      "submitBatch": "सत्यापन के लिए जमा करें"
+    },
+    "batches": {
+      "title": "जमा किए गए बैच",
+      "subtitle": "अपने सभी जमा किए गए जड़ी-बूटी बैचों को ट्रैक करें",
+      "batchId": "बैच आईडी",
+      "herb": "जड़ी-बूटी",
+      "quantity": "मात्रा",
+      "harvestDate": "कटाई की तारीख",
+      "region": "क्षेत्र",
+      "aiScore": "एआई स्कोर",
+      "status": "स्थिति",
+      "noBatches": "कोई बैच नहीं मिला।",
+      "downloadCertificate": "📄 प्रमाणपत्र डाउनलोड करें"
+    }
+  },
+  "notifications": {
+    "title": "फसल इतिहास और सूचनाएं",
+    "subtitle": "अपने जमा किए गए बैचों की प्रगति ट्रैक करें",
+    "timeline": "बैच टाइमलाइन",
+    "noNotifications": "अभी कोई बैच नहीं। अपना पहला बैच जमा करें और यहां प्रगति देखें।",
+    "stages": {
+      "submitted": "जमा किया गया",
+      "aiVerified": "एआई सत्यापित",
+      "auditorApproved": "ऑडिटर द्वारा अनुमोदित",
+      "certified": "प्रमाणित"
+    },
+    "status": {
+      "submitted": "🔵 जमा किया गया – एआई की प्रतीक्षा में",
+      "aiAnalyzed": "🟡 एआई विश्लेषण पूर्ण",
+      "approved": "🟢 अनुमोदित – प्रमाणपत्र तैयार",
+      "rejected": "🔴 अस्वीकृत – कार्रवाई आवश्यक"
+    },
+    "authenticitySCore": "प्रामाणिकता स्कोर",
+    "rejectionReason": "अस्वीकृति का कारण",
+    "viewDetails": "विवरण देखें"
+  },
+  "manufacturer": {
+    "dashboard": {
+      "welcome": "स्वागत है",
+      "subtitle": "आने वाले बैच और गुणवत्ता मैट्रिक्स की निगरानी करें",
+      "totalReceived": "कुल प्राप्त",
+      "pending": "समीक्षा लंबित",
+      "accepted": "स्वीकृत",
+      "rejected": "अस्वीकृत",
+      "batchStatus": "बैच स्थिति वितरण",
+      "weeklyDecisions": "साप्ताहिक निर्णय (7 दिन)"
+    },
+    "incoming": {
+      "title": "आने वाले बैच",
+      "subtitle": "आने वाली जड़ी-बूटी बैच की समीक्षा और प्रबंधन करें",
+      "batchId": "बैच आईडी",
+      "herb": "जड़ी-बूटी",
+      "farmer": "किसान",
+      "aiScore": "एआई स्कोर",
+      "potency": "शक्ति",
+      "status": "स्थिति",
+      "action": "कार्रवाई",
+      "noBatches": "कोई बैच नहीं मिला।"
+    },
+    "reports": {
+      "title": "बैच रिपोर्ट",
+      "subtitle": "व्यापक विश्लेषण और अंतर्दृष्टि",
+      "statusDistribution": "स्थिति वितरण",
+      "avgScoreByHerb": "जड़ी-बूटी प्रकार के अनुसार औसत स्कोर",
+      "accepted": "स्वीकृत",
+      "rejected": "अस्वीकृत",
+      "pending": "लंबित"
+    }
+  },
+  "auditor": {
+    "dashboard": {
+      "welcome": "स्वागत है",
+      "subtitle": "यह कागजी कार्रवाई के बिना शासन है",
+      "totalTracked": "कुल ट्रैक किए गए",
+      "compliant": "अनुपालन",
+      "nonCompliant": "गैर-अनुपालन",
+      "regions": "क्षेत्र",
+      "recentBatches": "हाल के बैच",
+      "complianceStatus": "अनुपालन स्थिति",
+      "regionDistribution": "क्षेत्र वितरण",
+      "complianceTrend": "अनुपालन प्रवृत्ति (7 दिन)",
+      "herbComplianceRate": "जड़ी-बूटी अनुपालन दर",
+      "readOnlyAccess": "केवल पढ़ने की पहुंच"
+    },
+    "history": {
+      "title": "बैच इतिहास",
+      "subtitle": "ब्लॉकचेन सत्यापन के साथ सभी ट्रैक किए गए बैचों का पूरा इतिहास",
+      "batchId": "बैच आईडी",
+      "herb": "जड़ी-बूटी",
+      "farmer": "किसान",
+      "region": "क्षेत्र",
+      "date": "तारीख",
+      "aiScore": "एआई स्कोर",
+      "ecoValid": "इको मान्य",
+      "compliance": "अनुपालन",
+      "blockchainHash": "ब्लॉकचेन हैश",
+      "allHerbs": "सभी जड़ी-बूटियाँ",
+      "allStatuses": "सभी स्थितियाँ",
+      "allRegions": "सभी क्षेत्र",
+      "noBatches": "कोई बैच नहीं मिला।",
+      "completeBatchHistory": "पूर्ण बैच इतिहास"
+    },
+    "complianceMap": {
+      "title": "अनुपालन भू-मानचित्र",
+      "subtitle": "क्षेत्रों में अनुपालन का भौगोलिक दृश्य",
+      "harvestLocationMap": "फसल स्थान मानचित्र",
+      "interactiveGeoMap": "इंटरैक्टिव भू-मानचित्र",
+      "showingLocations": "क्षेत्रों में फसल के स्थान दिखा रहा है",
+      "unknown": "अज्ञात",
+      "coordinatesNotAvailable": "निर्देशांक उपलब्ध नहीं",
+      "farmer": "किसान",
+      "totalLocations": "कुल स्थान",
+      "filterByStatus": "स्थिति से फ़िल्टर करें",
+      "filterByRegion": "क्षेत्र से फ़िल्टर करें",
+      "showing": "दिखा रहा है",
+      "of": "में से",
+      "status": "स्थिति",
+      "latitude": "अक्षांश",
+      "longitude": "देशांतर",
+      "viewDetails": "विवरण देखें",
+      "legend": "कथा"
+    }
+  },
+  "verify": {
+    "title": "बैच सत्यापन",
+    "verified": "सत्यापित",
+    "notVerified": "सत्यापित नहीं",
+    "verificationFailed": "सत्यापन विफल",
+    "batchNotFound": "बैच नहीं मिला",
+    "approvedMessage": "यह बैच स्वीकृत और सत्यापित किया गया है",
+    "notApprovedMessage": "यह बैच सत्यापन के लिए स्वीकृत नहीं किया गया है",
+    "batchInformation": "बैच जानकारी",
+    "batchId": "बैच आईडी",
+    "cropName": "फसल का नाम",
+    "verificationScores": "सत्यापन स्कोर",
+    "authenticityScore": "प्रामाणिकता स्कोर",
+    "potencyScore": "शक्ति स्कोर",
+    "geoValidation": "भू-सत्यापन",
+    "valid": "मान्य",
+    "invalid": "अमान्य",
+    "complianceStatus": "अनुपालन स्थिति",
+    "blockchainHash": "ब्लॉकचेन सत्यापन हैश",
+    "verifiedOn": "पर सत्यापित",
+    "footerText": "यह सत्यापन पृष्ठ ऊपर निर्दिष्ट बैच की प्रामाणिकता और अनुपालन स्थिति की पुष्टि करता है। यह दस्तावेज़ ब्लॉकचेन प्रौद्योगिकी के माध्यम से कृषि आपूर्ति श्रृंखला सत्यापन के प्रमाण के रूप में कार्य करता है।",
+    "backToHome": "होम पर वापस जाएं",
+    "verifying": "बैच सत्यापित हो रहा है..."
+  },
+  "index": {
+    "hero": {
+      "title": "हर्ब ट्रस्ट",
+      "subtitle": "ब्लॉकचेन-संचालित कृषि सत्यापन",
+      "description": "औषधीय जड़ी-बूटियों के लिए सुरक्षित, पारदर्शी और कुशल आपूर्ति श्रृंखला सत्यापन",
+      "getStarted": "शुरू करें",
+      "learnMore": "और जानें"
+    },
+    "features": {
+      "title": "हर्ब ट्रस्ट क्यों चुनें?",
+      "aiVerification": {
+        "title": "एआई-संचालित सत्यापन",
+        "description": "उन्नत मशीन लर्निंग एल्गोरिदम 95%+ सटीकता के साथ जड़ी-बूटी की प्रामाणिकता सत्यापित करते हैं"
+      },
+      "blockchain": {
+        "title": "ब्लॉकचेन सुरक्षा",
+        "description": "अपरिवर्तनीय रिकॉर्ड आपूर्ति श्रृंखला में पारदर्शिता और विश्वास सुनिश्चित करते हैं"
+      },
+      "realTime": {
+        "title": "वास्तविक समय ट्रैकिंग",
+        "description": "तत्काल अपडेट के साथ अपने बैचों को खेत से कारखाने तक मॉनिटर करें"
+      }
+    },
+    "roles": {
+      "title": "सभी के लिए बनाया गया",
+      "farmer": {
+        "title": "किसानों के लिए",
+        "description": "अपनी फसल जमा करें, तत्काल सत्यापन प्राप्त करें, और उचित मुआवजा सुनिश्चित करें"
+      },
+      "manufacturer": {
+        "title": "निर्माताओं के लिए",
+        "description": "सत्यापित बैचों तक पहुंचें, गुणवत्ता सुनिश्चित करें, और आसानी से अनुपालन बनाए रखें"
+      },
+      "auditor": {
+        "title": "लेखा परीक्षकों के लिए",
+        "description": "ब्लॉकचेन-समर्थित सत्यापन और व्यापक रिपोर्टिंग के साथ पारदर्शी निरीक्षण"
+      }
+    }
+  },
+  "chart": {
+    "day": "दिन",
+    "count": "गिनती",
+    "rate": "दर",
+    "score": "स्कोर",
+    "name": "नाम",
+    "value": "मान"
+  }
+}

@@ -1,16 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  Shield, CheckCircle2, AlertTriangle, Globe, FileSearch, Leaf, Search
+  Shield, CheckCircle2, AlertTriangle, Globe, FileSearch, Leaf, Search, Loader2, Download
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
-import { mockBatches, dashboardStats, complianceTrend } from '@/data/mockData';
 import { useAuth } from '@/contexts/AuthContext';
+import { getAllBatches } from '@/services/api';
+import type { Batch } from '@/types/batch';
+import FraudWarning from '@/components/FraudWarning';
 import {
   PieChart, Pie, Cell, BarChart, Bar, LineChart, Line,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
@@ -20,15 +24,46 @@ const COLORS_STATUS = ['hsl(142, 76%, 36%)', 'hsl(0, 72%, 50%)'];
 const REGION_COLORS = ['hsl(152, 45%, 38%)', 'hsl(38, 92%, 50%)', 'hsl(200, 70%, 50%)', 'hsl(280, 60%, 50%)', 'hsl(340, 70%, 50%)', 'hsl(60, 70%, 45%)'];
 
 export default function AuditorDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [search, setSearch] = useState('');
-  const stats = dashboardStats.auditor;
+  const [batches, setBatches] = useState<Batch[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
-  const recentBatches = mockBatches.slice(0, 10);
+  useEffect(() => {
+    const fetchBatches = async () => {
+      try {
+        const data = await getAllBatches();
+        setBatches(data);
+      } catch (error) {
+        console.error('Failed to fetch batches:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBatches();
+  }, []);
+
+  const handleDownloadCertificate = (batchId: number) => {
+    const url = `${import.meta.env.VITE_API_BASE_URL}/api/batches/${batchId}/certificate/`;
+    setDownloadingId(batchId);
+    window.open(url, '_blank');
+    setTimeout(() => setDownloadingId(null), 1000);
+  };
+
+  const stats = {
+    totalAudited: batches.length,
+    compliant: batches.filter(b => b.compliance_status === 'Approved').length,
+    nonCompliant: batches.filter(b => b.compliance_status === 'Rejected' || b.compliance_status === 'Fraud Suspected').length,
+    flaggedForReview: batches.filter(b => b.compliance_status === 'Fraud Suspected').length,
+  };
+
+  const recentBatches = batches.slice(0, 10);
   const filteredBatches = recentBatches.filter(b =>
-    b.herbName.toLowerCase().includes(search.toLowerCase()) ||
-    b.id.toLowerCase().includes(search.toLowerCase()) ||
-    b.complianceStatus.toLowerCase().includes(search.toLowerCase())
+    b.herb_type.toLowerCase().includes(search.toLowerCase()) ||
+    String(b.id).includes(search.toLowerCase()) ||
+    (b.compliance_status && b.compliance_status.toLowerCase().includes(search.toLowerCase()))
   );
 
   const complianceData = [
@@ -37,32 +72,50 @@ export default function AuditorDashboard() {
   ];
 
   const regionCounts: Record<string, number> = {};
-  mockBatches.forEach(b => { regionCounts[b.location.region] = (regionCounts[b.location.region] || 0) + 1; });
+  batches.forEach(b => { 
+    const region = b.region || 'Unknown';
+    regionCounts[region] = (regionCounts[region] || 0) + 1; 
+  });
   const regionData = Object.entries(regionCounts).map(([name, value]) => ({ name, value }));
 
   const herbCompliance: Record<string, { compliant: number; total: number }> = {};
-  mockBatches.forEach(b => {
-    if (!herbCompliance[b.herbType]) herbCompliance[b.herbType] = { compliant: 0, total: 0 };
-    herbCompliance[b.herbType].total++;
-    if (b.complianceStatus === 'approved') herbCompliance[b.herbType].compliant++;
+  batches.forEach(b => {
+    if (!herbCompliance[b.herb_type]) herbCompliance[b.herb_type] = { compliant: 0, total: 0 };
+    herbCompliance[b.herb_type].total++;
+    if (b.compliance_status === 'Approved') herbCompliance[b.herb_type].compliant++;
   });
   const herbComplianceData = Object.entries(herbCompliance).map(([name, d]) => ({
-    name, rate: Math.round((d.compliant / d.total) * 100),
+    name, rate: d.total > 0 ? Math.round((d.compliant / d.total) * 100) : 0,
   }));
 
-  const getComplianceBadge = (status: string) => {
-    switch (status) {
-      case 'approved': return <Badge className="badge-approved">Compliant</Badge>;
-      case 'blocked': return <Badge className="badge-blocked">Non-Compliant</Badge>;
-      default: return <Badge className="badge-pending">Under Review</Badge>;
+  // Calculate 7-day compliance trend from real data
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return d.toISOString().split('T')[0];
+  });
+  const complianceTrend = last7Days.map(date => {
+    const dayBatches = batches.filter(b => b.created_at.startsWith(date));
+    return {
+      day: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
+      compliant: dayBatches.filter(b => b.compliance_status === 'Approved').length,
+      nonCompliant: dayBatches.filter(b => b.compliance_status === 'Rejected' || b.compliance_status === 'Fraud Suspected').length,
+    };
+  });
+
+  const getComplianceBadge = (status: string | null) => {
+    switch (status?.toLowerCase()) {
+      case 'approved': return <Badge className="badge-approved">{t('compliance.compliant')}</Badge>;
+      case 'rejected': case 'fraud suspected': return <Badge className="badge-blocked">{t('compliance.nonCompliant')}</Badge>;
+      default: return <Badge className="badge-pending">{t('compliance.underReview')}</Badge>;
     }
   };
 
   const statCards = [
-    { label: 'Total Tracked', value: stats.totalTracked, icon: FileSearch, bg: 'bg-emerald-50', iconColor: 'text-emerald-600' },
-    { label: 'Compliant', value: stats.compliant, icon: CheckCircle2, bg: 'bg-green-50', iconColor: 'text-green-600' },
-    { label: 'Non-Compliant', value: stats.nonCompliant, icon: AlertTriangle, bg: 'bg-red-50', iconColor: 'text-red-500' },
-    { label: 'Regions', value: stats.regionsMonitored, icon: Globe, bg: 'bg-blue-50', iconColor: 'text-blue-600' },
+    { label: t('auditor.dashboard.totalTracked'), value: stats.totalAudited, icon: FileSearch, gradient: 'bg-gradient-to-br from-emerald-500 to-teal-600', textColor: 'text-white', iconColor: 'text-white' },
+    { label: t('auditor.dashboard.compliant'), value: stats.compliant, icon: CheckCircle2, gradient: 'bg-gradient-to-br from-blue-500 to-indigo-600', textColor: 'text-white', iconColor: 'text-white' },
+    { label: t('auditor.dashboard.nonCompliant'), value: stats.nonCompliant, icon: AlertTriangle, gradient: 'bg-gradient-to-br from-amber-500 to-orange-600', textColor: 'text-white', iconColor: 'text-white' },
+    { label: t('auditor.dashboard.regions'), value: Object.keys(regionCounts).length, icon: Globe, gradient: 'bg-gradient-to-br from-purple-500 to-violet-600', textColor: 'text-white', iconColor: 'text-white' },
   ];
 
   return (
@@ -70,31 +123,31 @@ export default function AuditorDashboard() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">
-            Welcome, <span className="text-gradient-primary">{user?.name}</span>
+            {t('auditor.dashboard.welcome')}, <span className="text-gradient-primary">{user?.name}</span>
           </h1>
-          <p className="text-muted-foreground mt-1">This is governance without paperwork.</p>
+          <p className="text-muted-foreground mt-1">{t('auditor.dashboard.subtitle')}</p>
         </div>
         <Badge variant="outline" className="w-fit px-4 py-2 border-primary/30 text-primary">
-          <Eye className="w-4 h-4 mr-2" />Read-Only Access
+          <Eye className="w-4 h-4 mr-2" />{t('auditor.dashboard.readOnlyAccess')}
         </Badge>
       </div>
 
       <div className="relative max-w-md">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Search batches..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
+        <Input placeholder={`${t('common.search')} batches...`} value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map(s => (
-          <Card key={s.label} className="card-botanical transition-glow">
-            <CardContent className="p-5">
+          <Card key={s.label} className={`border-0 ${s.gradient} overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl`}>
+            <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">{s.label}</p>
-                  <p className="text-3xl font-bold text-foreground mt-1">{s.value}</p>
+                <div className="flex-1">
+                  <p className={`text-xs font-semibold ${s.textColor} opacity-90 uppercase tracking-wider mb-2`}>{s.label}</p>
+                  <p className={`text-3xl font-bold ${s.textColor}`}>{s.value}</p>
                 </div>
-                <div className={`p-3 rounded-xl ${s.bg}`}>
-                  <s.icon className={`w-6 h-6 ${s.iconColor}`} />
+                <div className={`w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center transition-transform duration-300 group-hover:rotate-6`}>
+                  <s.icon className={`w-7 h-7 ${s.iconColor}`} />
                 </div>
               </div>
             </CardContent>
@@ -107,19 +160,20 @@ export default function AuditorDashboard() {
         <CardHeader className="border-b border-border">
           <CardTitle className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-primary" />
-            Recent Batches
+            {t('auditor.dashboard.recentBatches')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0 overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Batch ID</TableHead>
-                <TableHead>Herb</TableHead>
-                <TableHead>Farmer</TableHead>
-                <TableHead>Region</TableHead>
-                <TableHead>AI Score</TableHead>
-                <TableHead>Compliance</TableHead>
+                <TableHead>{t('auditor.history.batchId')}</TableHead>
+                <TableHead>{t('auditor.history.herb')}</TableHead>
+                <TableHead>{t('auditor.history.farmer')}</TableHead>
+                <TableHead>{t('auditor.history.region')}</TableHead>
+                <TableHead>{t('auditor.history.aiScore')}</TableHead>
+                <TableHead>{t('auditor.history.compliance')}</TableHead>
+                <TableHead className="text-right">{t('manufacturer.incoming.action')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -127,30 +181,58 @@ export default function AuditorDashboard() {
                 <TableRow key={batch.id} className="hover:bg-muted/30">
                   <TableCell className="font-mono text-primary">{batch.id}</TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2"><Leaf className="w-4 h-4 text-primary/60" />{batch.herbName}</div>
+                    <div className="flex items-center gap-2"><Leaf className="w-4 h-4 text-primary/60" />{batch.herb_type}</div>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{batch.farmerName}</TableCell>
-                  <TableCell className="text-muted-foreground">{batch.location.region}</TableCell>
+                  <TableCell className="text-muted-foreground">{batch.farmer_name || '-'}</TableCell>
+                  <TableCell className="text-muted-foreground">{batch.region || '-'}</TableCell>
                   <TableCell>
-                    <span className={`font-semibold ${batch.aiScore >= 80 ? 'text-success' : batch.aiScore >= 60 ? 'text-warning' : 'text-destructive'}`}>
-                      {batch.aiScore}%
-                    </span>
+                    <div className="space-y-1">
+                      {batch.authenticity_score !== null ? (
+                        <span className={`font-semibold ${batch.authenticity_score >= 75 ? 'text-success' : batch.authenticity_score >= 40 ? 'text-warning' : 'text-destructive'}`}>
+                          {batch.authenticity_score.toFixed(1)}%
+                        </span>
+                      ) : '-'}
+                      {batch.authenticity_score !== null && batch.authenticity_score < 60 && (
+                        <div className="mt-1">
+                          <FraudWarning authenticityScore={batch.authenticity_score} variant="compact" />
+                        </div>
+                      )}
+                    </div>
                   </TableCell>
-                  <TableCell>{getComplianceBadge(batch.complianceStatus)}</TableCell>
+                  <TableCell>{getComplianceBadge(batch.compliance_status)}</TableCell>
+                  <TableCell className="text-right">
+                    {batch.compliance_status === 'Approved' && (
+                      <Button
+                        size="sm"
+                        onClick={() => handleDownloadCertificate(batch.id)}
+                        disabled={downloadingId === batch.id}
+                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md"
+                      >
+                        {downloadingId === batch.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <>
+                            <Download className="w-4 h-4 mr-1" />
+                            {t('common.certificate')}
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
               {filteredBatches.length === 0 && (
-                <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No batches found.</TableCell></TableRow>
+                <TableRow><TableCell colSpan={7} className="text-center py-8 text-muted-foreground">{t('auditor.history.noBatches')}</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
 
-      {/* Charts */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="card-botanical">
-          <CardHeader><CardTitle className="text-base">Compliance Status</CardTitle></CardHeader>
+      {/* Charts - 2x2 Responsive Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="card-botanical h-full">
+          <CardHeader><CardTitle className="text-base">{t('auditor.dashboard.complianceStatus')}</CardTitle></CardHeader>
           <CardContent>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
@@ -166,8 +248,8 @@ export default function AuditorDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="card-botanical">
-          <CardHeader><CardTitle className="text-base">Region Distribution</CardTitle></CardHeader>
+        <Card className="card-botanical h-full">
+          <CardHeader><CardTitle className="text-base">{t('auditor.dashboard.regionDistribution')}</CardTitle></CardHeader>
           <CardContent>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
@@ -183,8 +265,8 @@ export default function AuditorDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="card-botanical">
-          <CardHeader><CardTitle className="text-base">Compliance Trend (7 Days)</CardTitle></CardHeader>
+        <Card className="card-botanical h-full">
+          <CardHeader><CardTitle className="text-base">{t('auditor.dashboard.complianceTrend')}</CardTitle></CardHeader>
           <CardContent>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
@@ -193,16 +275,16 @@ export default function AuditorDashboard() {
                   <YAxis tick={{ fontSize: 10 }} />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="compliant" stroke="hsl(142, 76%, 36%)" strokeWidth={2} />
-                  <Line type="monotone" dataKey="nonCompliant" name="Non-Compliant" stroke="hsl(0, 72%, 50%)" strokeWidth={2} />
+                  <Line type="monotone" dataKey="compliant" name={t('compliance.compliant')} stroke="hsl(142, 76%, 36%)" strokeWidth={2} />
+                  <Line type="monotone" dataKey="nonCompliant" name={t('compliance.nonCompliant')} stroke="hsl(0, 72%, 50%)" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="card-botanical">
-          <CardHeader><CardTitle className="text-base">Herb Compliance Rate</CardTitle></CardHeader>
+        <Card className="card-botanical h-full">
+          <CardHeader><CardTitle className="text-base">{t('auditor.dashboard.herbComplianceRate')}</CardTitle></CardHeader>
           <CardContent>
             <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
